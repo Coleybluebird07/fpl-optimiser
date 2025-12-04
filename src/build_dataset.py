@@ -1,22 +1,27 @@
 from typing import List, Dict
+import time
 import pandas as pd
+
 from src.fpl_api import get_bootstrap, get_player_history
 
-def build_sample_history_dataset(num_players: int = 10) -> pd.DataFrame:
-    #Build a sample dataset of player gameweek histories for the first `num_players`.
+
+def build_full_history_dataset() -> pd.DataFrame:
+    """
+    Fetches full historical gameweek data for all players.
+    Returns a DataFrame of player-week rows.
+    """
     bootstrap = get_bootstrap()
     players = bootstrap["elements"]
 
     rows: List[Dict] = []
 
-    # We only take the first `num_players` to avoid hammering the API while testing
-    for player in players[:num_players]:
+    for player in players:
         player_id = player["id"]
         player_name = f"{player['first_name']} {player['second_name']}"
-        position = player["element_type"]   # 1=GK, 2=DEF, 3=MID, 4=FWD
-        team_id = player["team"] #Change to team name at some point
+        position = player["element_type"]  # 1=GK,2=DEF,3=MID,4=FWD
+        team_id = player["team"]
 
-        print(f"Fetching history for {player_name} (ID: {player_id})...")
+        print(f"Fetching history for {player_name} ({player_id})...")
 
         history_data = get_player_history(player_id)
         history = history_data["history"]
@@ -38,5 +43,20 @@ def build_sample_history_dataset(num_players: int = 10) -> pd.DataFrame:
             }
             rows.append(row)
 
+        time.sleep(0.2)  # be polite to the API
+
     df = pd.DataFrame(rows)
     return df
+
+
+def main():
+    df = build_full_history_dataset()
+    print("Built dataset with", len(df), "rows")
+
+    output_path = "data/raw/player_history_sample.csv"
+    df.to_csv(output_path, index=False)
+    print("Saved CSV to", output_path)
+
+
+if __name__ == "__main__":
+    main()

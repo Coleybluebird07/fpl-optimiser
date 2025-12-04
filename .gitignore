@@ -1,19 +1,13 @@
 # Python
 __pycache__/
-*.py[cod]
-*.pyo
-*.pyd
-*.db
+*.pyc
 
-# Environments
-.env
-.venv/
+# Virtual env
 venv/
-env/
-
-# Jupyter Notebook checkpoints
-.ipynb_checkpoints/
+.venv/
 
 # OS
 .DS_Store
-Thumbs.db
+
+# Data
+*.csv
