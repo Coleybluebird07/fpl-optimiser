@@ -6,10 +6,9 @@ from src.fpl_api import get_bootstrap, get_player_history
 
 
 def build_full_history_dataset() -> pd.DataFrame:
-    """
-    Fetches full historical gameweek data for all players.
-    Returns a DataFrame of player-week rows.
-    """
+
+    #Fetches full history of gameweek data for all players.
+
     bootstrap = get_bootstrap()
     players = bootstrap["elements"]
 
@@ -43,7 +42,7 @@ def build_full_history_dataset() -> pd.DataFrame:
             }
             rows.append(row)
 
-        time.sleep(0.2)  # be polite to the API
+        time.sleep(0.2)
 
     df = pd.DataFrame(rows)
     return df
