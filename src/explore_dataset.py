@@ -10,14 +10,29 @@ def load_dataset():
     return df
 
 
-def add_form_feature(df):
+def add_form_features(df):
     df = df.sort_values(by=["player_id", "gameweek"])
+    group = df.groupby("player_id")["total_points"]
+
+    df["last_points"] = group.shift(1)
+
     df["form_last3"] = (
-        df.groupby("player_id")["total_points"]
-        .rolling(window=3, min_periods=1)
+        group.rolling(window=3, min_periods=1)
         .mean()
         .reset_index(level=0, drop=True)
     )
+
+    df["form_last5"] = (
+        group.rolling(window=5, min_periods=1)
+        .mean()
+        .reset_index(level=0, drop=True)
+    )
+
+    df["season_avg"] = (
+        df.groupby(["player_id", "team_id"])["total_points"]
+        .transform(lambda x: x.mean())
+    )
+
     return df
 
 
@@ -41,7 +56,8 @@ def evaluate_baseline(df):
 
 def train_ml_model(df):
     features = [
-        "form_last3", "minutes", "goals_scored", "assists",
+        "last_points", "form_last3", "form_last5", "season_avg",
+        "minutes", "goals_scored", "assists",
         "is_gk", "is_def", "is_mid", "is_fwd"
     ]
 
@@ -69,7 +85,7 @@ def train_ml_model(df):
 
 def main():
     df = load_dataset()
-    df = add_form_feature(df)
+    df = add_form_features(df)
     df = add_position_features(df)
     df = baseline_expected_points(df)
 
