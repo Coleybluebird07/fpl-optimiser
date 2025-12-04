@@ -1,28 +1,16 @@
 from src.fpl_api import get_bootstrap, get_player_history
+from src.build_dataset import build_sample_history_dataset
 
 
 def main():
-    data = get_bootstrap()
-    
-    # Take the first player and fetch their history
-    first_player = data["elements"][0]
-    player_id = first_player["id"]
-    player_name = f"{first_player['first_name']} {first_player['second_name']}"
+    df = build_sample_history_dataset(num_players=10)
+    print("Built dataset with", len(df), "rows")
 
-    print(f"\nFetching history for player: {player_name} (ID: {player_id})")
-    history_data = get_player_history(player_id)
-
-    # 'history' is a list of gameweek performances
-    history = history_data["history"]
-    print(f"Number of past gameweeks for this player: {len(history)}")
-
-    # Let's print the first 3 gameweeks for this player
-    print("\nFirst 3 gameweeks for this player:")
-    for gw in history[:3]:
-        print(
-            f"GW {gw['round']}: {gw['total_points']} pts, "
-            f"{gw['minutes']} mins, opponent_team={gw['opponent_team']}"
-        )
+    # Save to data/raw folder
+    output_path = "data/raw/player_history_sample.csv"
+    # Make sure folder exists (we'll create it manually for now)
+    df.to_csv(output_path, index=False)
+    print("Saved CSV to", output_path)
 
 
 if __name__ == "__main__":
