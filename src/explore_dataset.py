@@ -1,5 +1,5 @@
 import pandas as pd
-
+import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_absolute_error
@@ -28,12 +28,26 @@ def add_form_features(df):
         .reset_index(level=0, drop=True)
     )
 
+    #
     df["season_avg"] = (
         df.groupby(["player_id", "team_id"])["total_points"]
         .transform(lambda x: x.mean())
     )
 
+    # average points when playing at home
+    df["home_avg"] = (
+        df.groupby(["player_id", "was_home"])["total_points"]
+        .transform(lambda x: x.mean())
+    )
+
+    # Points per 90 minutes this season (rate of productivity)
+    df["points_per_90"] = (
+        (df["total_points"] / df["minutes"]) * 90
+    ).replace([np.inf, -np.inf], 0).fillna(0)
+
     return df
+
+
 
 
 def add_position_features(df):
@@ -53,12 +67,27 @@ def evaluate_baseline(df):
     df["abs_error"] = (df["total_points"] - df["expected_points_baseline"]).abs()
     return df["abs_error"].mean()
 
+def add_fixture_difficulty(df):
+
+    # defensive difficulty = avg total_points conceded to players
+    difficulty_map = (
+        df.groupby("opponent_team")["total_points"]
+        .mean()
+        .to_dict()
+    )
+
+    # Map difficulty score to rows
+    df["fixture_difficulty"] = df["opponent_team"].map(difficulty_map)
+
+    return df
+
 
 def train_ml_model(df):
     features = [
-        "last_points", "form_last3", "form_last5", "season_avg",
+        "last_points", "form_last3", "form_last5",
+        "season_avg", "home_avg", "fixture_difficulty",
         "minutes", "goals_scored", "assists",
-        "is_gk", "is_def", "is_mid", "is_fwd"
+        "is_gk", "is_def", "is_mid", "is_fwd", "points_per_90"
     ]
 
     df = df.dropna(subset=features + ["total_points"])
@@ -85,10 +114,11 @@ def train_ml_model(df):
 
 def main():
     df = load_dataset()
-    df = add_form_features(df)
+    df = add_form_features(df)        
+    df = add_fixture_difficulty(df)
     df = add_position_features(df)
     df = baseline_expected_points(df)
-
+    
     baseline_mae = evaluate_baseline(df)
     print(f"Baseline MAE: {baseline_mae:.2f}")
 
