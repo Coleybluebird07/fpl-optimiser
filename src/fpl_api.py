@@ -2,22 +2,33 @@ import requests
 
 BASE_URL = "https://fantasy.premierleague.com/api"
 
+
 def get_bootstrap():
-    #Fetches main FPL game data (players, teams, events etc.)
+    #Fetch main FPL game data (players, teams, events etc.) 
     url = f"{BASE_URL}/bootstrap-static/"
-    response = requests.get(url)
-    response.raise_for_status()
-    return response.json()
+    resp = requests.get(url, timeout=10)
+    resp.raise_for_status()
+    return resp.json()
+
 
 def get_player_history(player_id: int) -> dict:
-    #Fetches past performance history for a specific player.    
+    #Fetch past performance history for players.
     url = f"{BASE_URL}/element-summary/{player_id}/"
-    response = requests.get(url)
-    response.raise_for_status()
-    return response.json()
+    resp = requests.get(url, timeout=10)
+    resp.raise_for_status()
+    return resp.json()
+
+
+def get_fixtures():
+    #Fetch all fixtures for the current season.
+    url = f"{BASE_URL}/fixtures/"
+    resp = requests.get(url, timeout=10)
+    resp.raise_for_status()
+    return resp.json()
+
 
 if __name__ == "__main__":
+    #sanity check
     data = get_bootstrap()
-    print("Top-level keys:")
-    for key in data.keys():
-        print("-", key)
+    print("Teams:", len(data["teams"]))
+    print("Players:", len(data["elements"]))
