@@ -1,8 +1,8 @@
 import pandas as pd
 import numpy as np
-from fpl_api import get_bootstrap
+from src.fpl_api import get_bootstrap
 from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LinearRegression
+from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.metrics import mean_absolute_error
 
 
@@ -11,10 +11,16 @@ FEATURE_COLUMNS = [
     "last_points",
     "form_last3",
     "form_last5",
+    "minutes_last5",
+    "starts_last5",
+    "goals_last3",
+    "goals_last5",
+    "assists_last3",
+    "assists_last5",
     "season_avg",
     "home_avg",
     "fixture_difficulty",
-    "was_home",       
+    "was_home",
     "minutes",
     "goals_scored",
     "assists",
@@ -27,7 +33,7 @@ FEATURE_COLUMNS = [
     "season_points_per_appearance",
     "season_goal_rate",
     "season_assist_rate",
-    "premium_tag"
+    "premium_tag",
 ]
 
 
@@ -39,23 +45,69 @@ def load_dataset() -> pd.DataFrame:
 # ---------- Feature engineering ----------
 
 def add_form_features(df: pd.DataFrame) -> pd.DataFrame:
-    
-    #Adds form-based and season-based features per player.
+    """
+    Adds form-based, minutes-based and season-based features per player.
+    """
     df = df.sort_values(by=["player_id", "gameweek"])
-    group = df.groupby("player_id")["total_points"]
+
+    # Groups for different stats
+    pts_group = df.groupby("player_id")["total_points"]
+    minutes_group = df.groupby("player_id")["minutes"]
+    goals_group = df.groupby("player_id")["goals_scored"]
+    assists_group = df.groupby("player_id")["assists"]
 
     # Points from previous gameweek
-    df["last_points"] = group.shift(1)
+    df["last_points"] = pts_group.shift(1)
 
-    # Rolling form windows
+    # Rolling form windows (points)
     df["form_last3"] = (
-        group.rolling(window=3, min_periods=1)
+        pts_group.rolling(window=3, min_periods=1)
         .mean()
         .reset_index(level=0, drop=True)
     )
     df["form_last5"] = (
-        group.rolling(window=5, min_periods=1)
+        pts_group.rolling(window=5, min_periods=1)
         .mean()
+        .reset_index(level=0, drop=True)
+    )
+
+    # --- NEW: minutes & starts form ---
+
+    # "Start" = played 60+ minutes
+    df["start_flag"] = (df["minutes"] >= 60).astype(int)
+    starts_group = df.groupby("player_id")["start_flag"]
+
+    df["minutes_last5"] = (
+        minutes_group.rolling(window=5, min_periods=1)
+        .mean()
+        .reset_index(level=0, drop=True)
+    )
+
+    df["starts_last5"] = (
+        starts_group.rolling(window=5, min_periods=1)
+        .sum()
+        .reset_index(level=0, drop=True)
+    )
+
+    df["goals_last3"] = (
+        goals_group.rolling(window=3, min_periods=1)
+        .sum()
+        .reset_index(level=0, drop=True)
+    )
+    df["goals_last5"] = (
+        goals_group.rolling(window=5, min_periods=1)
+        .sum()
+        .reset_index(level=0, drop=True)
+    )
+
+    df["assists_last3"] = (
+        assists_group.rolling(window=3, min_periods=1)
+        .sum()
+        .reset_index(level=0, drop=True)
+    )
+    df["assists_last5"] = (
+        assists_group.rolling(window=5, min_periods=1)
+        .sum()
         .reset_index(level=0, drop=True)
     )
 
@@ -159,10 +211,11 @@ def evaluate_baseline(df: pd.DataFrame) -> float:
 # ---------- ML model ----------
 
 def train_ml_model(df: pd.DataFrame):
-    
-    # Train a linear regression model on the engineered features.
+    #This handles non-linear relationships much better than plain linear regression.
+   
     features = FEATURE_COLUMNS
 
+    # Drop rows that are missing any of the features or target
     df = df.dropna(subset=features + ["total_points"])
 
     X = df[features]
@@ -172,15 +225,25 @@ def train_ml_model(df: pd.DataFrame):
         X, y, test_size=0.25, random_state=42
     )
 
-    model = LinearRegression()
+    model = GradientBoostingRegressor(
+        n_estimators=300,
+        learning_rate=0.05,
+        max_depth=3,
+        subsample=0.8,
+        random_state=42,
+    )
+
     model.fit(X_train, y_train)
 
     predictions = model.predict(X_test)
     mae = mean_absolute_error(y_test, predictions)
 
-    print("\nModel coefficients (feature importance):")
-    for feature_name, coef in zip(features, model.coef_):
-        print(f"{feature_name:>16}: {coef:.3f}")
+    print("\nFeature importances (Gradient Boosting):")
+    importances = model.feature_importances_
+    for feature_name, importance in sorted(
+        zip(features, importances), key=lambda x: x[1], reverse=True
+    ):
+        print(f"{feature_name:>24}: {importance:.3f}")
 
     return model, mae
 

@@ -1,7 +1,7 @@
 import os
 import pandas as pd
 
-from fpl_api import get_bootstrap, get_fixtures
+from src.fpl_api import get_bootstrap, get_fixtures
 from explore_dataset import (
     load_dataset,
     add_form_features,
