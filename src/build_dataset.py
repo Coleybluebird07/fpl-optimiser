@@ -2,7 +2,7 @@ from typing import List, Dict
 import time
 import pandas as pd
 
-from src.fpl_api import get_bootstrap, get_player_history
+from fpl_api import get_bootstrap, get_player_history
 
 
 def build_full_history_dataset() -> pd.DataFrame:

@@ -4,6 +4,13 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_absolute_error
 
+FEATURE_COLUMNS = [
+    "last_points", "form_last3", "form_last5",
+    "season_avg", "home_avg", "fixture_difficulty",
+    "minutes", "goals_scored", "assists",
+    "is_gk", "is_def", "is_mid", "is_fwd",
+    "points_per_90",
+]
 
 def load_dataset():
     df = pd.read_csv("data/raw/player_history_sample.csv")
@@ -83,16 +90,10 @@ def add_fixture_difficulty(df):
 
 
 def train_ml_model(df):
-    features = [
-        "last_points", "form_last3", "form_last5",
-        "season_avg", "home_avg", "fixture_difficulty",
-        "minutes", "goals_scored", "assists",
-        "is_gk", "is_def", "is_mid", "is_fwd", "points_per_90"
-    ]
 
-    df = df.dropna(subset=features + ["total_points"])
+    df = df.dropna(subset=FEATURE_COLUMNS + ["total_points"])
 
-    X = df[features]
+    X = df[FEATURE_COLUMNS]
     y = df["total_points"]
 
     X_train, X_test, y_train, y_test = train_test_split(
@@ -106,7 +107,7 @@ def train_ml_model(df):
     mae = mean_absolute_error(y_test, predictions)
 
     print("\nModel coefficients (feature importance):")
-    for feature_name, coef in zip(features, model.coef_):
+    for feature_name, coef in zip(FEATURE_COLUMNS, model.coef_):
         print(f"  {feature_name:>12}: {coef:.3f}")
 
     return model, mae
