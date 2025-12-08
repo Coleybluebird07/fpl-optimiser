@@ -2,42 +2,41 @@ import os
 import pandas as pd
 
 from src.fpl_api import get_bootstrap, get_fixtures
-from explore_dataset import (
+from src.explore_dataset import (
     load_dataset,
     add_form_features,
-    add_fixture_difficulty,
+    add_opponent_strength,   
     add_position_features,
     train_ml_model,
     FEATURE_COLUMNS,
     add_cost_to_dataset,
+    add_future_target,
 )
 
 
 def build_model_and_features():
-
-    # Rebuild the full feature dataframe and train the ML model.
     df = load_dataset()
-    df = add_cost_to_dataset(df) 
+    df = add_cost_to_dataset(df)
     df = add_form_features(df)
-    df = add_fixture_difficulty(df)
+    df = add_opponent_strength(df, df)
     df = add_position_features(df)
+    df = add_future_target(df)   
 
     model, ml_mae = train_ml_model(df)
-    print(f"\nTrained model, ML MAE: {ml_mae:.2f}")
+    print(f"\nTrained model, ML MAE (next GW): {ml_mae:.2f}")
     return df, model
 
 
 def get_latest_state_per_player(df: pd.DataFrame) -> pd.DataFrame:
-  
-    # For each player, take their most recent gameweek row as their 'current state'.
+
+    #For each player, take their most recent gameweek row
+
     df_sorted = df.sort_values(["player_id", "gameweek"])
     latest = df_sorted.groupby("player_id").tail(1).copy()
     return latest
 
 
 def get_next_gameweek_fixture_map():
-    
-    #Build a dict: team_id -> (opponent_team_id, was_home) for the next upcoming gameweek.
     fixtures = get_fixtures()
 
     # Only fixtures that belong to a GW and are not finished
@@ -59,12 +58,12 @@ def get_next_gameweek_fixture_map():
 
 
 def apply_next_fixture_context(latest: pd.DataFrame, full_df: pd.DataFrame) -> pd.DataFrame:
-    
-    #Overwrite 'opponent_team', 'was_home' and 'fixture_difficulty' in the latest rows to reflect the *next* fixture instead of the last one.
+    latest = latest.copy()
+
     fixture_map, next_gw = get_next_gameweek_fixture_map()
     print(f"\nApplying fixture context for GW {next_gw}...")
 
-    # Build difficulty map from full history
+    # Build difficulty map from history
     difficulty_map = (
         full_df.groupby("opponent_team")["total_points"]
         .mean()
@@ -72,50 +71,58 @@ def apply_next_fixture_context(latest: pd.DataFrame, full_df: pd.DataFrame) -> p
     )
 
     def map_opp(team_id):
-        opp, _ = fixture_map.get(team_id, (None, None))
-        return opp
+        return fixture_map.get(team_id, (None, None))[0]
 
     def map_home(team_id):
-        _, home_flag = fixture_map.get(team_id, (None, None))
-        return home_flag
+        return fixture_map.get(team_id, (None, None))[1]
 
     latest["opponent_team"] = latest["team_id"].map(map_opp)
     latest["was_home"] = latest["team_id"].map(map_home)
 
-    # New fixture difficulty based on next opponent
     latest["fixture_difficulty"] = latest["opponent_team"].map(difficulty_map)
 
     return latest
 
 
 def add_current_cost(latest: pd.DataFrame) -> pd.DataFrame:
+    #Add current live cost from API.
 
-    # Add current FPL price.
+    latest = latest.copy()
     bootstrap = get_bootstrap()
     elements = bootstrap["elements"]
+
     id_to_cost = {p["id"]: p["now_cost"] / 10.0 for p in elements}
     latest["now_cost"] = latest["player_id"].map(id_to_cost)
     return latest
 
 
 def predict_next_gameweek():
-    # 1. Train model & get full history DF with features
+    """
+    1) Train + build enriched historical DF
+    2) Take latest observation per player
+    3) Apply next fixture context
+    4) Recompute opponent strength for that fixture
+    5) Predict next GW performance
+    """
     full_df, model = build_model_and_features()
 
-    # 2. Get latest state for each player
+    # Get latest state
     latest = get_latest_state_per_player(full_df)
 
-    # 3. Apply next GW fixture context
+    # Apply next fixture state (sets opponent_team, was_home, fixture_difficulty)
     latest = apply_next_fixture_context(latest, full_df)
 
-    # 4. Add current cost information
+    # Recompute opponent strength for the NEW opponent (key step)
+    latest = add_opponent_strength(latest, full_df)
+
+    # Add current live price
     latest = add_current_cost(latest)
 
-    # 5. Prepare features and predict
+    # Predict
     X_latest = latest[FEATURE_COLUMNS].fillna(0)
     latest["predicted_points"] = model.predict(X_latest)
 
-    # 6. Select output columns
+    # Select outputs
     output = latest[
         [
             "player_id",
@@ -129,7 +136,6 @@ def predict_next_gameweek():
 
     output = output.sort_values("predicted_points", ascending=False)
 
-    # 7. Save and preview
     os.makedirs("data/predictions", exist_ok=True)
     out_path = "data/predictions/next_gw_predictions.csv"
     output.to_csv(out_path, index=False)
