@@ -7135,7 +7135,7 @@ player_id,player_name,position,team_id,gameweek,total_points,minutes,was_home,op
 119,Bryan Mbeumo,3,14,12,1,90,True,9,0,0,0
 119,Bryan Mbeumo,3,14,13,1,90,False,8,0,0,0
 119,Bryan Mbeumo,3,14,14,2,90,True,19,0,0,0
-119,Bryan Mbeumo,3,14,15,0,0,False,20,0,0,0
+119,Bryan Mbeumo,3,14,15,6,90,False,20,1,0,0
 431,Altay Bayındır,1,14,1,2,90,True,1,0,0,0
 431,Altay Bayındır,1,14,2,2,90,False,10,0,0,0
 431,Altay Bayındır,1,14,3,1,90,True,3,0,0,0
@@ -7240,7 +7240,7 @@ player_id,player_name,position,team_id,gameweek,total_points,minutes,was_home,op
 437,Lisandro Martínez,2,14,12,0,0,True,9,0,0,0
 437,Lisandro Martínez,2,14,13,1,8,False,8,0,0,0
 437,Lisandro Martínez,2,14,14,1,2,True,19,0,0,0
-437,Lisandro Martínez,2,14,15,0,0,False,20,0,0,0
+437,Lisandro Martínez,2,14,15,1,21,False,20,0,0,0
 438,Noussair Mazraoui,2,14,1,0,0,True,1,0,0,0
 438,Noussair Mazraoui,2,14,2,0,0,False,10,0,0,0
 438,Noussair Mazraoui,2,14,3,1,5,True,3,0,0,0
@@ -7255,7 +7255,7 @@ player_id,player_name,position,team_id,gameweek,total_points,minutes,was_home,op
 438,Noussair Mazraoui,2,14,12,1,45,True,9,0,0,0
 438,Noussair Mazraoui,2,14,13,1,36,False,8,0,0,0
 438,Noussair Mazraoui,2,14,14,3,90,True,19,0,0,0
-438,Noussair Mazraoui,2,14,15,0,0,False,20,0,0,0
+438,Noussair Mazraoui,2,14,15,2,68,False,20,0,0,0
 439,Diego León Blanco,2,14,1,0,0,True,1,0,0,0
 439,Diego León Blanco,2,14,2,0,0,False,10,0,0,0
 439,Diego León Blanco,2,14,3,0,0,True,3,0,0,0
@@ -7285,7 +7285,7 @@ player_id,player_name,position,team_id,gameweek,total_points,minutes,was_home,op
 440,Diogo Dalot Teixeira,2,14,12,1,32,True,9,0,0,0
 440,Diogo Dalot Teixeira,2,14,13,2,90,False,8,0,0,0
 440,Diogo Dalot Teixeira,2,14,14,15,67,True,19,1,0,1
-440,Diogo Dalot Teixeira,2,14,15,0,0,False,20,0,0,0
+440,Diogo Dalot Teixeira,2,14,15,5,83,False,20,0,1,0
 441,Patrick Dorgu,2,14,1,1,90,True,1,0,0,0
 441,Patrick Dorgu,2,14,2,2,90,False,10,0,0,0
 441,Patrick Dorgu,2,14,3,0,0,True,3,0,0,0
@@ -7300,7 +7300,7 @@ player_id,player_name,position,team_id,gameweek,total_points,minutes,was_home,op
 441,Patrick Dorgu,2,14,12,1,57,True,9,0,0,0
 441,Patrick Dorgu,2,14,13,1,1,False,8,0,0,0
 441,Patrick Dorgu,2,14,14,1,22,True,19,0,0,0
-441,Patrick Dorgu,2,14,15,0,0,False,20,0,0,0
+441,Patrick Dorgu,2,14,15,1,6,False,20,0,0,0
 442,Harry Maguire,2,14,1,1,10,True,1,0,0,0
 442,Harry Maguire,2,14,2,1,3,False,10,0,0,0
 442,Harry Maguire,2,14,3,0,0,True,3,0,0,0
@@ -7330,7 +7330,7 @@ player_id,player_name,position,team_id,gameweek,total_points,minutes,was_home,op
 443,Luke Shaw,2,14,12,2,90,True,9,0,0,0
 443,Luke Shaw,2,14,13,1,81,False,8,0,0,0
 443,Luke Shaw,2,14,14,1,87,True,19,0,0,0
-443,Luke Shaw,2,14,15,0,0,False,20,0,0,0
+443,Luke Shaw,2,14,15,2,90,False,20,0,0,0
 444,Leny Yoro,2,14,1,4,90,True,1,0,0,0
 444,Leny Yoro,2,14,2,6,86,False,10,0,1,0
 444,Leny Yoro,2,14,3,1,84,True,3,0,0,0
@@ -7345,7 +7345,7 @@ player_id,player_name,position,team_id,gameweek,total_points,minutes,was_home,op
 444,Leny Yoro,2,14,12,2,90,True,9,0,0,0
 444,Leny Yoro,2,14,13,1,53,False,8,0,0,0
 444,Leny Yoro,2,14,14,1,45,True,19,0,0,0
-444,Leny Yoro,2,14,15,0,0,False,20,0,0,0
+444,Leny Yoro,2,14,15,1,21,False,20,0,0,0
 445,Harry Amass,2,14,1,0,0,True,1,0,0,0
 445,Harry Amass,2,14,2,0,0,False,10,0,0,0
 445,Harry Amass,2,14,3,0,0,True,3,0,0,0
@@ -7390,7 +7390,7 @@ player_id,player_name,position,team_id,gameweek,total_points,minutes,was_home,op
 447,Ayden Heaven,2,14,12,0,0,True,9,0,0,0
 447,Ayden Heaven,2,14,13,0,0,False,8,0,0,0
 447,Ayden Heaven,2,14,14,0,45,True,19,0,0,0
-447,Ayden Heaven,2,14,15,0,0,False,20,0,0,0
+447,Ayden Heaven,2,14,15,2,68,False,20,0,0,0
 448,Tyrell Malacia,2,14,1,0,0,True,1,0,0,0
 448,Tyrell Malacia,2,14,2,0,0,False,10,0,0,0
 448,Tyrell Malacia,2,14,3,0,0,True,3,0,0,0
@@ -7420,7 +7420,7 @@ player_id,player_name,position,team_id,gameweek,total_points,minutes,was_home,op
 449,Bruno Borges Fernandes,3,14,12,2,90,True,9,0,0,0
 449,Bruno Borges Fernandes,3,14,13,11,90,False,8,0,2,0
 449,Bruno Borges Fernandes,3,14,14,4,90,True,19,0,0,0
-449,Bruno Borges Fernandes,3,14,15,0,0,False,20,0,0,0
+449,Bruno Borges Fernandes,3,14,15,15,90,False,20,2,1,0
 450,Matheus Santos Carneiro da Cunha,3,14,1,2,90,True,1,0,0,0
 450,Matheus Santos Carneiro da Cunha,3,14,2,2,90,False,10,0,0,0
 450,Matheus Santos Carneiro da Cunha,3,14,3,1,30,True,3,0,0,0
@@ -7435,7 +7435,7 @@ player_id,player_name,position,team_id,gameweek,total_points,minutes,was_home,op
 450,Matheus Santos Carneiro da Cunha,3,14,12,0,0,True,9,0,0,0
 450,Matheus Santos Carneiro da Cunha,3,14,13,0,0,False,8,0,0,0
 450,Matheus Santos Carneiro da Cunha,3,14,14,3,76,True,19,0,0,1
-450,Matheus Santos Carneiro da Cunha,3,14,15,0,0,False,20,0,0,0
+450,Matheus Santos Carneiro da Cunha,3,14,15,5,90,False,20,0,1,0
 451,Marcus Rashford,3,14,1,0,0,True,1,0,0,0
 451,Marcus Rashford,3,14,2,0,0,False,10,0,0,0
 451,Marcus Rashford,3,14,3,0,0,True,3,0,0,0
@@ -7465,7 +7465,7 @@ player_id,player_name,position,team_id,gameweek,total_points,minutes,was_home,op
 452,Amad Diallo,3,14,12,2,90,True,9,0,0,0
 452,Amad Diallo,3,14,13,2,90,False,8,0,0,0
 452,Amad Diallo,3,14,14,2,90,True,19,0,0,0
-452,Amad Diallo,3,14,15,0,0,False,20,0,0,0
+452,Amad Diallo,3,14,15,5,90,False,20,0,1,0
 454,Antony dos Santos,3,14,1,0,0,True,1,0,0,0
 454,Antony dos Santos,3,14,2,0,0,False,10,0,0,0
 454,Antony dos Santos,3,14,3,0,0,True,3,0,0,0
@@ -7495,7 +7495,7 @@ player_id,player_name,position,team_id,gameweek,total_points,minutes,was_home,op
 455,Mason Mount,3,14,12,1,45,True,9,0,0,0
 455,Mason Mount,3,14,13,8,90,False,8,1,0,0
 455,Mason Mount,3,14,14,1,12,True,19,0,0,0
-455,Mason Mount,3,14,15,0,0,False,20,0,0,0
+455,Mason Mount,3,14,15,7,83,False,20,1,0,0
 457,Carlos Henrique Casimiro,3,14,1,2,64,True,1,0,0,0
 457,Carlos Henrique Casimiro,3,14,2,0,52,False,10,0,0,0
 457,Carlos Henrique Casimiro,3,14,3,5,71,True,3,0,1,0
@@ -7510,7 +7510,7 @@ player_id,player_name,position,team_id,gameweek,total_points,minutes,was_home,op
 457,Carlos Henrique Casimiro,3,14,12,0,57,True,9,0,0,0
 457,Carlos Henrique Casimiro,3,14,13,4,90,False,8,0,0,0
 457,Carlos Henrique Casimiro,3,14,14,8,90,True,19,0,1,0
-457,Carlos Henrique Casimiro,3,14,15,0,0,False,20,0,0,0
+457,Carlos Henrique Casimiro,3,14,15,2,77,False,20,0,0,0
 458,Kobbie Mainoo,3,14,1,0,0,True,1,0,0,0
 458,Kobbie Mainoo,3,14,2,0,0,False,10,0,0,0
 458,Kobbie Mainoo,3,14,3,1,45,True,3,0,0,0
@@ -7525,7 +7525,7 @@ player_id,player_name,position,team_id,gameweek,total_points,minutes,was_home,op
 458,Kobbie Mainoo,3,14,12,1,32,True,9,0,0,0
 458,Kobbie Mainoo,3,14,13,1,1,False,8,0,0,0
 458,Kobbie Mainoo,3,14,14,0,0,True,19,0,0,0
-458,Kobbie Mainoo,3,14,15,0,0,False,20,0,0,0
+458,Kobbie Mainoo,3,14,15,1,12,False,20,0,0,0
 459,Manuel Ugarte Ribeiro,3,14,1,1,25,True,1,0,0,0
 459,Manuel Ugarte Ribeiro,3,14,2,1,21,False,10,0,0,0
 459,Manuel Ugarte Ribeiro,3,14,3,0,0,True,3,0,0,0
@@ -7645,7 +7645,7 @@ player_id,player_name,position,team_id,gameweek,total_points,minutes,was_home,op
 466,Joshua Zirkzee,4,14,12,2,90,True,9,0,0,0
 466,Joshua Zirkzee,4,14,13,9,90,False,8,1,0,0
 466,Joshua Zirkzee,4,14,14,2,77,True,19,0,0,1
-466,Joshua Zirkzee,4,14,15,0,0,False,20,0,0,0
+466,Joshua Zirkzee,4,14,15,1,6,False,20,0,0,0
 467,Chido Obi,4,14,1,0,0,True,1,0,0,0
 467,Chido Obi,4,14,2,0,0,False,10,0,0,0
 467,Chido Obi,4,14,3,0,0,True,3,0,0,0
@@ -7702,7 +7702,7 @@ player_id,player_name,position,team_id,gameweek,total_points,minutes,was_home,op
 733,Senne Lammens,1,14,12,2,90,True,9,0,0,0
 733,Senne Lammens,1,14,13,2,90,False,8,0,0,0
 733,Senne Lammens,1,14,14,2,90,True,19,0,0,0
-733,Senne Lammens,1,14,15,0,0,False,20,0,0,0
+733,Senne Lammens,1,14,15,2,90,False,20,0,0,0
 755,Shea Lacey,3,14,12,0,0,True,9,0,0,0
 755,Shea Lacey,3,14,13,0,0,False,8,0,0,0
 755,Shea Lacey,3,14,14,0,0,True,19,0,0,0
@@ -10564,7 +10564,7 @@ player_id,player_name,position,team_id,gameweek,total_points,minutes,was_home,op
 627,Sam Johnstone,1,20,12,1,90,True,8,0,0,0
 627,Sam Johnstone,1,20,13,3,90,False,2,0,0,0
 627,Sam Johnstone,1,20,14,2,90,True,16,0,0,0
-627,Sam Johnstone,1,20,15,0,0,True,14,0,0,0
+627,Sam Johnstone,1,20,15,1,90,True,14,0,0,0
 628,José Malheiro de Sá,1,20,1,0,90,True,13,0,0,0
 628,José Malheiro de Sá,1,20,2,3,90,False,4,0,0,0
 628,José Malheiro de Sá,1,20,3,1,90,True,9,0,0,0
@@ -10609,7 +10609,7 @@ player_id,player_name,position,team_id,gameweek,total_points,minutes,was_home,op
 631,Emmanuel Agbadou,2,20,12,3,90,True,8,0,0,0
 631,Emmanuel Agbadou,2,20,13,2,90,False,2,0,0,0
 631,Emmanuel Agbadou,2,20,14,2,90,True,16,0,0,0
-631,Emmanuel Agbadou,2,20,15,0,0,True,14,0,0,0
+631,Emmanuel Agbadou,2,20,15,2,90,True,14,0,0,0
 632,Matt Doherty,2,20,1,-1,90,True,13,0,0,0
 632,Matt Doherty,2,20,2,1,90,False,4,0,0,0
 632,Matt Doherty,2,20,3,0,0,True,9,0,0,0
@@ -10639,7 +10639,7 @@ player_id,player_name,position,team_id,gameweek,total_points,minutes,was_home,op
 633,Hugo Bueno López,2,20,12,1,2,True,8,0,0,0
 633,Hugo Bueno López,2,20,13,1,13,False,2,0,0,0
 633,Hugo Bueno López,2,20,14,0,0,True,16,0,0,0
-633,Hugo Bueno López,2,20,15,0,0,True,14,0,0,0
+633,Hugo Bueno López,2,20,15,1,20,True,14,0,0,0
 634,Yerson Mosquera Valdelamar,2,20,1,0,0,True,13,0,0,0
 634,Yerson Mosquera Valdelamar,2,20,2,0,0,False,4,0,0,0
 634,Yerson Mosquera Valdelamar,2,20,3,0,0,True,9,0,0,0
@@ -10654,7 +10654,7 @@ player_id,player_name,position,team_id,gameweek,total_points,minutes,was_home,op
 634,Yerson Mosquera Valdelamar,2,20,12,0,0,True,8,0,0,0
 634,Yerson Mosquera Valdelamar,2,20,13,1,76,False,2,0,0,0
 634,Yerson Mosquera Valdelamar,2,20,14,1,80,True,16,0,0,0
-634,Yerson Mosquera Valdelamar,2,20,15,0,0,True,14,0,0,0
+634,Yerson Mosquera Valdelamar,2,20,15,-1,90,True,14,0,0,0
 635,Rodrigo Martins Gomes,2,20,1,1,17,True,13,0,0,0
 635,Rodrigo Martins Gomes,2,20,2,0,0,False,4,0,0,0
 635,Rodrigo Martins Gomes,2,20,3,7,27,True,9,1,0,0
@@ -10699,7 +10699,7 @@ player_id,player_name,position,team_id,gameweek,total_points,minutes,was_home,op
 637,Toti Gomes,2,20,12,3,90,True,8,0,0,0
 637,Toti Gomes,2,20,13,4,90,False,2,0,0,0
 637,Toti Gomes,2,20,14,2,90,True,16,0,0,0
-637,Toti Gomes,2,20,15,0,0,True,14,0,0,0
+637,Toti Gomes,2,20,15,1,69,True,14,0,0,0
 638,Ki-Jana Hoever,2,20,1,1,72,True,13,0,0,0
 638,Ki-Jana Hoever,2,20,2,1,34,False,4,0,0,0
 638,Ki-Jana Hoever,2,20,3,0,0,True,9,0,0,0
@@ -10714,7 +10714,7 @@ player_id,player_name,position,team_id,gameweek,total_points,minutes,was_home,op
 638,Ki-Jana Hoever,2,20,12,0,0,True,8,0,0,0
 638,Ki-Jana Hoever,2,20,13,0,0,False,2,0,0,0
 638,Ki-Jana Hoever,2,20,14,1,9,True,16,0,0,0
-638,Ki-Jana Hoever,2,20,15,0,0,True,14,0,0,0
+638,Ki-Jana Hoever,2,20,15,0,85,True,14,0,0,0
 639,Bastien Meupiyou Menadjou,2,20,1,0,0,True,13,0,0,0
 639,Bastien Meupiyou Menadjou,2,20,2,0,0,False,4,0,0,0
 639,Bastien Meupiyou Menadjou,2,20,3,0,0,True,9,0,0,0
@@ -10789,7 +10789,7 @@ player_id,player_name,position,team_id,gameweek,total_points,minutes,was_home,op
 643,André Trindade da Costa Neto,3,20,12,4,90,True,8,0,0,0
 643,André Trindade da Costa Neto,3,20,13,3,90,False,2,0,0,0
 643,André Trindade da Costa Neto,3,20,14,2,90,True,16,0,0,0
-643,André Trindade da Costa Neto,3,20,15,0,0,True,14,0,0,0
+643,André Trindade da Costa Neto,3,20,15,4,90,True,14,0,0,0
 644,Jean-Ricner Bellegarde,3,20,1,2,72,True,13,0,0,0
 644,Jean-Ricner Bellegarde,3,20,2,1,45,False,4,0,0,0
 644,Jean-Ricner Bellegarde,3,20,3,1,26,True,9,0,0,0
@@ -10804,7 +10804,7 @@ player_id,player_name,position,team_id,gameweek,total_points,minutes,was_home,op
 644,Jean-Ricner Bellegarde,3,20,12,1,24,True,8,0,0,0
 644,Jean-Ricner Bellegarde,3,20,13,2,68,False,2,0,0,0
 644,Jean-Ricner Bellegarde,3,20,14,3,66,True,16,0,0,1
-644,Jean-Ricner Bellegarde,3,20,15,0,0,True,14,0,0,0
+644,Jean-Ricner Bellegarde,3,20,15,6,53,True,14,1,0,0
 645,Fer López González,3,20,1,1,18,True,13,0,0,0
 645,Fer López González,3,20,2,0,0,False,4,0,0,0
 645,Fer López González,3,20,3,1,26,True,9,0,0,0
@@ -10819,7 +10819,7 @@ player_id,player_name,position,team_id,gameweek,total_points,minutes,was_home,op
 645,Fer López González,3,20,12,0,0,True,8,0,0,0
 645,Fer López González,3,20,13,0,0,False,2,0,0,0
 645,Fer López González,3,20,14,0,0,True,16,0,0,0
-645,Fer López González,3,20,15,0,0,True,14,0,0,0
+645,Fer López González,3,20,15,1,36,True,14,0,0,0
 646,João Victor Gomes da Silva,3,20,1,2,90,True,13,0,0,0
 646,João Victor Gomes da Silva,3,20,2,1,90,False,4,0,0,0
 646,João Victor Gomes da Silva,3,20,3,2,90,True,9,0,0,0
@@ -10954,7 +10954,7 @@ player_id,player_name,position,team_id,gameweek,total_points,minutes,was_home,op
 654,Jørgen Strand Larsen,4,20,12,2,90,True,8,0,0,0
 654,Jørgen Strand Larsen,4,20,13,2,90,False,2,0,0,0
 654,Jørgen Strand Larsen,4,20,14,2,90,True,16,0,0,0
-654,Jørgen Strand Larsen,4,20,15,0,0,True,14,0,0,0
+654,Jørgen Strand Larsen,4,20,15,1,68,True,14,0,0,0
 655,Fábio Soares Silva,4,20,1,0,0,True,13,0,0,0
 655,Fábio Soares Silva,4,20,2,0,0,False,4,0,0,0
 655,Fábio Soares Silva,4,20,3,0,0,True,9,0,0,0
@@ -11029,7 +11029,7 @@ player_id,player_name,position,team_id,gameweek,total_points,minutes,was_home,op
 663,Jhon Arias,3,20,12,1,15,True,8,0,0,0
 663,Jhon Arias,3,20,13,1,87,False,2,0,0,0
 663,Jhon Arias,3,20,14,2,80,True,16,0,0,0
-663,Jhon Arias,3,20,15,0,0,True,14,0,0,0
+663,Jhon Arias,3,20,15,2,69,True,14,0,0,0
 682,David Møller Wolfe,2,20,1,1,71,True,13,0,0,0
 682,David Møller Wolfe,2,20,2,1,45,False,4,0,0,0
 682,David Møller Wolfe,2,20,3,4,15,True,9,0,1,0
@@ -11044,7 +11044,7 @@ player_id,player_name,position,team_id,gameweek,total_points,minutes,was_home,op
 682,David Møller Wolfe,2,20,12,1,87,True,8,0,0,0
 682,David Møller Wolfe,2,20,13,1,76,False,2,0,0,0
 682,David Møller Wolfe,2,20,14,2,90,True,16,0,0,0
-682,David Møller Wolfe,2,20,15,0,0,True,14,0,0,0
+682,David Møller Wolfe,2,20,15,3,90,True,14,0,1,0
 695,Jackson Tchatchoua,2,20,2,1,55,False,4,0,0,0
 695,Jackson Tchatchoua,2,20,3,1,62,True,9,0,0,0
 695,Jackson Tchatchoua,2,20,4,1,13,False,15,0,0,0
@@ -11058,7 +11058,7 @@ player_id,player_name,position,team_id,gameweek,total_points,minutes,was_home,op
 695,Jackson Tchatchoua,2,20,12,1,90,True,8,0,0,0
 695,Jackson Tchatchoua,2,20,13,2,90,False,2,0,0,0
 695,Jackson Tchatchoua,2,20,14,2,80,True,16,0,0,0
-695,Jackson Tchatchoua,2,20,15,0,0,True,14,0,0,0
+695,Jackson Tchatchoua,2,20,15,1,4,True,14,0,0,0
 709,Ladislav Krejcí,2,20,3,0,0,True,9,0,0,0
 709,Ladislav Krejcí,2,20,4,1,90,False,15,0,0,0
 709,Ladislav Krejcí,2,20,5,7,90,True,11,1,0,0
@@ -11071,7 +11071,7 @@ player_id,player_name,position,team_id,gameweek,total_points,minutes,was_home,op
 709,Ladislav Krejcí,2,20,12,1,74,True,8,0,0,0
 709,Ladislav Krejcí,2,20,13,0,0,False,2,0,0,0
 709,Ladislav Krejcí,2,20,14,0,0,True,16,0,0,0
-709,Ladislav Krejcí,2,20,15,0,0,True,14,0,0,0
+709,Ladislav Krejcí,2,20,15,1,90,True,14,0,0,0
 720,Tolu Arokodare,4,20,4,2,65,False,15,0,0,0
 720,Tolu Arokodare,4,20,5,2,90,True,11,0,0,0
 720,Tolu Arokodare,4,20,6,1,6,False,18,0,0,0
@@ -11083,9 +11083,9 @@ player_id,player_name,position,team_id,gameweek,total_points,minutes,was_home,op
 720,Tolu Arokodare,4,20,12,1,65,True,8,0,0,0
 720,Tolu Arokodare,4,20,13,1,2,False,2,0,0,0
 720,Tolu Arokodare,4,20,14,1,9,True,16,0,0,0
-720,Tolu Arokodare,4,20,15,0,0,True,14,0,0,0
+720,Tolu Arokodare,4,20,15,1,21,True,14,0,0,0
 749,Mateus Mané,4,20,11,1,20,False,7,0,0,0
 749,Mateus Mané,4,20,12,0,0,True,8,0,0,0
 749,Mateus Mané,4,20,13,1,13,False,2,0,0,0
 749,Mateus Mané,4,20,14,1,9,True,16,0,0,0
-749,Mateus Mané,4,20,15,0,0,True,14,0,0,0
+749,Mateus Mané,4,20,15,1,20,True,14,0,0,0
