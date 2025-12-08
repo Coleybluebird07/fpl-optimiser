@@ -1,4 +1,5 @@
 import os
+import numpy as np
 import pandas as pd
 
 from src.fpl_api import get_bootstrap, get_fixtures
@@ -10,41 +11,55 @@ from src.explore_dataset import (
     train_ml_model,
     FEATURE_COLUMNS,
     add_cost_to_dataset,
-    add_future_target,   
 )
 
+# Minimum number of recent starts we tolerate
+# If starts_last5 <= MIN_STARTS_THRESHOLD we treat them as strong rotation risk
+MIN_STARTS_THRESHOLD = 1
 
+# Hard sanity cap on single-GW expected points
+MAX_PREDICTED_POINTS = 13.0
+
+
+# ---------------------------------------------------------------------
+#  Training / feature-building pipeline
+# ---------------------------------------------------------------------
 def build_model_and_features():
-    
-    #Build the full historical feature dataframe and train the ML model on it.
-   
+    """
+    Build full historical dataframe with engineered features and train the
+    global ML model. Returns the dataframe, the model, and a calibration factor.
+    """
     df = load_dataset()
     df = add_cost_to_dataset(df)
     df = add_form_features(df)
-    df = add_opponent_strength(df, df)  
+    df = add_opponent_strength(df, df)
     df = add_position_features(df)
-    df = add_future_target(df)       
 
-    model, ml_mae = train_ml_model(df)
-    print(f"\nTrained model, ML MAE (next GW): {ml_mae:.2f}")
-
-    return df, model
+    model, ml_mae, calibration = train_ml_model(df)
+    print(f"\nTrained global model. Calibration factor: {calibration:.2f}")
+    return df, model, calibration
 
 
+# ---------------------------------------------------------------------
+#  Fixture utilities
+# ---------------------------------------------------------------------
 def get_latest_state_per_player(df: pd.DataFrame) -> pd.DataFrame:
-    
-    #For each player, take their most recent gameweek row as their 'current state'.
-    
+    """
+    For each player, take their most recent gameweek row as their 'current state'.
+    """
     df_sorted = df.sort_values(["player_id", "gameweek"])
     latest = df_sorted.groupby("player_id").tail(1).copy()
     return latest
 
 
 def get_next_gameweek_fixture_map():
+    """
+    Build dict: team_id -> (opponent_team_id, was_home_flag)
+    for the next upcoming gameweek.
+    """
     fixtures = get_fixtures()
-
-    # Only fixtures that belong to a GW and are not finished
     upcoming = [f for f in fixtures if f["event"] is not None and not f["finished"]]
+
     if not upcoming:
         raise RuntimeError("No upcoming fixtures found")
 
@@ -62,16 +77,16 @@ def get_next_gameweek_fixture_map():
 
 
 def apply_next_fixture_context(latest: pd.DataFrame, full_df: pd.DataFrame) -> pd.DataFrame:
-  
-    #Overwrites opponent_team, was_home and fixture difficulty in latest player rows so they reflect the *next fixture*.
-
-
+    """
+    Overwrites opponent_team, was_home and fixture_difficulty in
+    latest player rows so they reflect the *next fixture*.
+    """
     latest = latest.copy()
 
     fixture_map, next_gw = get_next_gameweek_fixture_map()
     print(f"\nApplying fixture context for GW {next_gw}...")
 
-    # Build difficulty map from history
+    # Build difficulty map from history (avg FPL points conceded)
     difficulty_map = (
         full_df.groupby("opponent_team")["total_points"]
         .mean()
@@ -87,14 +102,16 @@ def apply_next_fixture_context(latest: pd.DataFrame, full_df: pd.DataFrame) -> p
     latest["opponent_team"] = latest["team_id"].map(map_opp)
     latest["was_home"] = latest["team_id"].map(map_home)
 
-    # New fixture difficulty
+    # New fixture difficulty based on next opponent
     latest["fixture_difficulty"] = latest["opponent_team"].map(difficulty_map)
 
     return latest
 
 
 def add_current_cost(latest: pd.DataFrame) -> pd.DataFrame:
-    #Add current live cost from API (now_cost is provided in tenths of millions).
+    """
+    Add current live FPL price (now_cost is provided in tenths of millions).
+    """
     latest = latest.copy()
     bootstrap = get_bootstrap()
     elements = bootstrap["elements"]
@@ -104,46 +121,90 @@ def add_current_cost(latest: pd.DataFrame) -> pd.DataFrame:
     return latest
 
 
+# ---------------------------------------------------------------------
+#  Rotation / start-likelihood adjustment
+# ---------------------------------------------------------------------
+def apply_rotation_penalty(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Down-weight expected points for players who haven't been starting regularly.
+
+    This is intentionally strict: we prefer to miss the odd punt rather than
+    recommend non-starters.
+    """
+    df = df.copy()
+
+    # Approximate start likelihood from the last 5 matches
+    df["start_likelihood"] = df["starts_last5"] / 5.0
+
+    # Hard hammer for players with virtually no recent starts
+    zero_start_mask = df["starts_last5"] <= MIN_STARTS_THRESHOLD
+    df.loc[zero_start_mask, "predicted_points"] *= 0.15  # 85% penalty
+
+    # Softer scaling across the board: 0.6x–1.2x depending on recent starts
+    scale = 0.6 + 0.6 * df["start_likelihood"]  # from 0.6 (never) to 1.2 (always)
+    df["predicted_points"] *= scale
+
+    return df
+
+
+# ---------------------------------------------------------------------
+#  Main prediction pipeline
+# ---------------------------------------------------------------------
 def predict_next_gameweek():
     """
     1) Train + build enriched historical DF
     2) Take latest observation per player
     3) Apply next fixture context
-    4) Recompute opponent strength for that fixture
-    5) Predict next GW performance with fixture-strength scaling
+    4) Predict with calibrated global model
+    5) Apply distribution-scale adjustment vs historical scores
+    6) Apply rotation penalties
+    7) Clip to realistic FPL range
+    8) Save and print top players
     """
-    # 1. Train model and get full feature history
-    full_df, model = build_model_and_features()
+    full_df, model, calibration = build_model_and_features()
 
-    # 2. Latest row per player
+    # -----------------------
+    # Historical distribution
+    # -----------------------
+    full_X = full_df[FEATURE_COLUMNS].fillna(0)
+    full_preds = model.predict(full_X) * calibration
+
+    # Compare 95th percentile of true vs predicted
+    true_p95 = float(np.percentile(full_df["total_points"], 95))
+    pred_p95 = float(np.percentile(full_preds, 95))
+
+    if pred_p95 > 0:
+        dist_scale = true_p95 / pred_p95
+    else:
+        dist_scale = 1.0
+
+    print(f"\nHistorical 95th percentile true points: {true_p95:.2f}")
+    print(f"Historical 95th percentile predicted:   {pred_p95:.2f}")
+    print(f"Distribution scale factor:             {dist_scale:.2f}")
+
+    # -----------------------
+    # Current state for next GW
+    # -----------------------
     latest = get_latest_state_per_player(full_df)
-
-    # 3. Apply next GW fixture state
     latest = apply_next_fixture_context(latest, full_df)
-
-    # 4. Recompute opponent strength for the NEXT opponent
-    latest = add_opponent_strength(latest, full_df)
-
-    # 5. Add current live price
     latest = add_current_cost(latest)
 
-    # 6. Base model prediction
+    # Base predictions
     X_latest = latest[FEATURE_COLUMNS].fillna(0)
-    base_preds = model.predict(X_latest)
+    latest["predicted_points"] = model.predict(X_latest)
 
-    # --- Fixture strength adjustment ---
-    # opp_def_strength: 0 ≈ strong defence, 1 ≈ weak defence
-    # We map this to a 0.9–1.1 multiplier (–10% to +10%).
-    fixture_mult = 0.9 + 0.2 * latest["opp_def_strength"]
-    fixture_mult = fixture_mult.clip(0.85, 1.15)  # extra safety clamp
+    # Apply calibration + distribution scaling
+    latest["predicted_points"] *= (calibration * dist_scale)
 
-    latest["fixture_multiplier"] = fixture_mult
-    latest["predicted_points"] = base_preds * fixture_mult
+    # Rotation / start likelihood penalty
+    latest = apply_rotation_penalty(latest)
 
-    # Final sanity clamp on extreme predictions (rarely > 20 in FPL)
-    latest["predicted_points"] = latest["predicted_points"].clip(0, 20)
+    # Clip to sane range for a single GW
+    latest["predicted_points"] = latest["predicted_points"].clip(
+        lower=0.0, upper=MAX_PREDICTED_POINTS
+    )
 
-    # 7. Select outputs
+    # Prepare output
     output = latest[
         [
             "player_id",
@@ -157,12 +218,13 @@ def predict_next_gameweek():
 
     output = output.sort_values("predicted_points", ascending=False)
 
-    # 8. Save and preview
+    # Save
     os.makedirs("data/predictions", exist_ok=True)
     out_path = "data/predictions/next_gw_predictions.csv"
     output.to_csv(out_path, index=False)
     print(f"\nSaved predictions to {out_path}")
 
+    # Preview
     print("\nTop 15 players by predicted points:")
     print(output.head(15))
 
